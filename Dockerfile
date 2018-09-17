@@ -17,7 +17,8 @@ RUN make
 
 COPY --from=twgo/bunpun /usr/local/hok8-bu7/tsiau-bopiautiam/* tsiau/
 RUN cat tsiau/* > bun.txt
-RUN /opt/bin/i686-m64/ngram-count -text bun.txt -lm bun.arpa
-RUN /opt/bin/i686-m64/ngram -lm bun.arpa -ppl bun.txt
+RUN /opt/bin/i686-m64/ngram-count -text bun.txt -order 3 -prune 1e-4 -lm bun1.arpa
+RUN /opt/bin/i686-m64/ngram-count -text bun.txt -order 3 -prune 1e-7 -lm bun3.arpa
+RUN /opt/bin/i686-m64/ngram -lm bun3.arpa -ppl bun.txt
 
 CMD /opt/bin/i686-m64/ngram-count
