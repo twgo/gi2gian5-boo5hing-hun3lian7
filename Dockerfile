@@ -22,7 +22,7 @@ RUN ngram -count -text bun.txt -order 1 \
   -write 語言模型.count
 RUN cat 語言模型.count | \
   sort -rnk 2 | \
-  head -n 100000 | \
+  head -n 50000 | \
   awk '{print $1}' | \
   cat > 頭前5000詞.vocab
 
