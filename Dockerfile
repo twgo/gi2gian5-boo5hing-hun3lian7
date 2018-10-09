@@ -18,11 +18,11 @@ RUN make
 COPY --from=twgo/bunpun /usr/local/hok8-bu7/tsiau-bopiautiam/* tsiau/
 RUN cat tsiau/* > bun.txt
 
+RUN apt-get update && apt-get install -y wget
 RUN wget -O tai.txt https://github.com/twgo/su5pio2/raw/master/kithann/2018%E5%8F%B0lexicon.txt
 RUN wget -O ing.txt https://github.com/twgo/su5pio2/raw/master/kithann/2018%E8%8B%B1lexicon.txt
 RUN wget -O hua.txt https://github.com/twgo/su5pio2/raw/master/kithann/2018%E8%8F%AF%E8%AA%9Elexicon
 RUN cat tai.txt ing.txt hua.txt >> ka.txt
-RUN cp lexicon.txt hethong/dict/lexicon.txt
 RUN cat tai.txt ing.txt hua.txt | awk '{print $1}' > pio2.txt
 
 RUN /opt/bin/i686-m64/ngram-count -text pio2.txt -order 1 -lm pio2.arpa
