@@ -18,7 +18,7 @@ RUN make
 COPY --from=twgo/bunpun /usr/local/hok8-bu7/tsiau-bopiautiam/* tsiau/
 RUN cat tsiau/* > bun.txt
 
-RUN /opt/bin/i686-m64/ngram -count -text bun.txt -order 1 \
+RUN /opt/bin/i686-m64/ngram-count -text bun.txt -order 1 \
   -write 語言模型.count
 RUN cat 語言模型.count | \
   sort -rnk 2 | \
