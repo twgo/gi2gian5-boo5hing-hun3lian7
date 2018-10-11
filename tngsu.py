@@ -14,10 +14,16 @@ def _main():
     for tsua in stdin.readlines():
         句物件 = (
             拆文分析器.建立句物件(tsua.rstrip())
-            .揣詞(拄好長度辭典揣詞, 辭典)
-            .揀(座標揀集內組)
         )
-        print(句物件.看型('-', ' '))
+        su = []
+        for 詞物件 in 句物件.網出詞物件():
+            su.append(
+                詞物件
+                .揣詞(拄好長度辭典揣詞, 辭典)
+                .揀(座標揀集內組)
+                .看型('-', ' ')
+            )
+        print(' '.join(su))
 
 
 if __name__ == '__main__':
