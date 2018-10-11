@@ -22,7 +22,6 @@ RUN /opt/bin/i686-m64/ngram-count -text bun.guan.txt -order 1 \
   -write 語言模型.count
 RUN cat 語言模型.count | \
   sort -rnk 2 | \
-  head -n 100000 | \
   awk '{print $1}' | \
   cat > 頭前5000詞.vocab
 
