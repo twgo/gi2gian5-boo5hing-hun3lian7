@@ -33,10 +33,17 @@ COPY --from=srilm /opt/bun.guan.txt .
 COPY tngsu.py .
 RUN python3 tngsu.py 頭前5000詞.vocab < bun.guan.txt > bun.txt
 
-FROM srilm
+FROM srilm as sng
 COPY --from=kangku /opt/bun.txt .
 RUN /opt/bin/i686-m64/ngram-count -text bun.txt -vocab 頭前5000詞.vocab -order 3 -prune 1e-4 -lm bun1.arpa
 RUN /opt/bin/i686-m64/ngram-count -text bun.txt -vocab 頭前5000詞.vocab -order 3 -prune 1e-7 -lm bun3.arpa
 RUN /opt/bin/i686-m64/ngram -lm bun3.arpa -ppl bun.txt
 
 CMD /opt/bin/i686-m64/ngram-count
+
+FROM ubuntu:18.04
+WORKDIR /opt
+COPY --from=kangku /opt/bun.txt .
+COPY --from=sng /opt/bun1.arpa .
+COPY --from=sng /opt/bun3.arpa .
+
