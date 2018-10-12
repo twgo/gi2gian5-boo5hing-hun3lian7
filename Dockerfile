@@ -22,12 +22,13 @@ RUN /opt/bin/i686-m64/ngram-count -text bun.guan.txt -order 1 \
   -write 語言模型.count
 RUN cat 語言模型.count | \
   sort -rnk 2 | \
-  head -n 100000 | \
+  head -n 50000 | \
   awk '{print $1}' | \
   cat > 頭前5000詞.vocab.tsuanlo
 COPY --from=twgo/su5pio2 /usr/local/hok8-bu7/docker.csv .
-RUN cat docker.csv | awk -F ',' '{print $2}' | tail -n +2 > kip
-RUN cat kip | sort -u > 頭前5000詞.vocab
+RUN cat docker.csv | awk -F ',' '{print $2}' | tail -n +2 | sort -u > kip
+RUN cat kip 頭前5000詞.vocab.tsuanlo | sort -u > 頭前5000詞.vocab
+RUN wc 頭前5000詞.vocab
 
 FROM i3thuan5/tai5-uan5_gian5-gi2_kang1-ku7:latest as kangku
 WORKDIR /opt
