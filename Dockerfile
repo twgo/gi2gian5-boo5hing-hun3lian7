@@ -16,12 +16,18 @@ RUN sed '5iSRILM=/opt' -i Makefile
 RUN make
 
 COPY --from=twgo/bunpun /usr/local/hok8-bu7/tsiau-bopiautiam/* tsiau/
-RUN cat tsiau/* > bun.txt
+RUN cat tsiau/* > bun.guan.txt
 RUN wget -O - https://github.com/sih4sing5hong5/forpa-lexicon/raw/master/%E5%8F%B0%E8%AA%9E%E6%96%87%E6%9C%AC/%E9%99%B3%E5%85%88%E7%94%9F%E6%8F%90%E4%BE%9B%E7%9A%84%E8%AA%9E%E5%8F%A5.%E5%88%86%E8%A9%9E.gz | gzip -d | \
   sed 's/[^ ]*｜//g' | \
   sed 's/0//g' | \
-  sed 's/[？…。 ，]//g' | \
-  cat >> bun.txt
+  sed 's/[？…。，]//g' | \
+  cat >> bun.guan.txt
+RUN wget -O - https://github.com/twgo/tshiapai-tianue/raw/master/kiatko >> bun.guan.txt
+RUN wget -O - https://github.com/twgo/tshiapai-tianue/raw/master/TL_phrases_mtko_trans.txt | \
+  sed 's/^[^ ]*//g' | \
+  sed 's/^[^/]*\/\///g' | \
+  sed 's/[()]//g' >> bun.guan.txt
+RUN cat bun.guan.txt | sed 's/[01]\([a-z]\+[0-9]\)/\1/g' > bun.txt
 
 RUN wget -O tai.txt https://github.com/twgo/su5pio2/raw/master/kithann/2018%E5%8F%B0lexicon.txt
 RUN wget -O ing.txt https://github.com/twgo/su5pio2/raw/master/kithann/2018%E8%8B%B1lexicon.txt
@@ -37,10 +43,12 @@ RUN /opt/bin/i686-m64/ngram-count -text bun.txt -order 3 -prune 1e-4 -lm bun1.gu
 RUN /opt/bin/i686-m64/ngram-count -text bun.txt -order 3 -prune 1e-7 -lm bun3.guan.arpa
 
 RUN /opt/bin/i686-m64/ngram -lm bun1.guan.arpa \
-  -mix-lm pio2.arpa -lambda 0.1 \
+  -mix-lm pio2.arpa -lambda 0.5 \
+  -mix-lm2 ingpio2.arpa -mix-lambda2 0.01 \
   -write-lm bun1.arpa
 RUN /opt/bin/i686-m64/ngram -lm bun3.guan.arpa \
-  -mix-lm pio2.arpa -lambda 0.1 \
+  -mix-lm pio2.arpa -lambda 0.5 \
+  -mix-lm2 ingpio2.arpa -mix-lambda2 0.01 \
   -write-lm bun3.arpa
 
 RUN /opt/bin/i686-m64/ngram -lm bun3.arpa -ppl bun.txt
